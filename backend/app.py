@@ -95,20 +95,26 @@ class API(BaseHTTPRequestHandler):
                 return self.responder(400, {"ok": False, "erro": "Uma das fotos é muito grande."})
 
             with conectar() as db:
-                cur = db.execute(
-                    "INSERT INTO profissionais "
-                    "(nome, whatsapp, regiao, servico, descricao, fotos, criado_em) "
-                    "VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    (nome, whatsapp, regiao, servico, descricao,
-                     json.dumps(fotos), datetime.now(timezone.utc).isoformat())
-                )
-                novo_id = cur.lastrowid
-
-            return self.responder(201, {
-                "ok": True,
-                "mensagem": "Profissional cadastrado no banco de dados.",
-                "id": novo_id
-            })
+                existente = db.execute(
+                    "SELECT id FROM profissionais WHERE whatsapp = ? ORDER BY id DESC LIMIT 1",
+                    (whatsapp,)
+                ).fetchone()
+                if existente:
+                    perfil_id = existente[0]
+                    db.execute(
+                        "UPDATE profissionais SET nome=?, regiao=?, servico=?, descricao=?, fotos=? WHERE id=?",
+                        (nome, regiao, servico, descricao, json.dumps(fotos), perfil_id)
+                    )
+                    status, mensagem = 200, "Cadastro existente atualizado."
+                else:
+                    cur = db.execute(
+                        "INSERT INTO profissionais (nome, whatsapp, regiao, servico, descricao, fotos, criado_em) "
+                        "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                        (nome, whatsapp, regiao, servico, descricao, json.dumps(fotos), datetime.now(timezone.utc).isoformat())
+                    )
+                    perfil_id = cur.lastrowid
+                    status, mensagem = 201, "Profissional cadastrado no banco de dados."
+            return self.responder(status, {"ok": True, "mensagem": mensagem, "id": perfil_id})
         except (ValueError, json.JSONDecodeError):
             return self.responder(400, {"ok": False, "erro": "Dados inválidos."})
         except Exception:
