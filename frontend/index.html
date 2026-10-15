@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101827"><title>ConectaPro | NM TECH</title>
+<style>
+:root{--bg:#f3f6fb;--ink:#172235;--muted:#65738a;--blue:#2563eb;--navy:#101827;--line:#e4eaf2;--green:#159765}*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink)}header{background:var(--navy);color:white;padding:20px max(18px,calc((100% - 1050px)/2)) 30px}.brand{font-size:12px;letter-spacing:2px;color:#9eb7e8;font-weight:800}.logo{font-size:30px;font-weight:850;margin-top:7px;letter-spacing:-1px}.logo span{color:#62a0ff}.tag{color:#c4cee0;font-size:14px;margin-top:4px}.hero{max-width:1050px;margin:24px auto 0;padding:0 18px}.hero h1{font-size:clamp(25px,5vw,40px);line-height:1.12;margin:0 0 12px;max-width:680px}.hero p{color:#d0d8e7;max-width:620px;line-height:1.55}.search{display:flex;gap:8px;margin-top:20px;max-width:680px}.search input{min-width:0;flex:1;padding:14px;border:0;border-radius:12px;font-size:15px}.btn{border:0;border-radius:11px;padding:13px 17px;background:var(--blue);color:white;font-weight:750;font-size:14px;cursor:pointer}.main{max-width:1050px;margin:25px auto;padding:0 18px 40px}.sectionhead{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:15px}.sectionhead h2{font-size:21px;margin:0}.muted{color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.category{border:1px solid var(--line);background:white;border-radius:15px;padding:16px 12px;text-align:left;cursor:pointer;color:var(--ink);min-height:112px}.category:focus,.category:hover{border-color:var(--blue);box-shadow:0 3px 14px #1e40af12}.emoji{font-size:27px;display:block;margin-bottom:9px}.category strong{font-size:14px;display:block}.category small{display:block;color:var(--muted);margin-top:4px;font-size:12px}.notice{margin:20px 0;padding:13px 15px;border:1px solid #d8e4f6;background:#eaf2ff;color:#25436f;border-radius:12px;font-size:13px;line-height:1.5}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}.step{background:white;border:1px solid var(--line);border-radius:14px;padding:17px}.step b{display:block;margin-bottom:6px}.step p{font-size:13px;color:var(--muted);line-height:1.5;margin:0}.cta{margin-top:24px;background:white;border:1px solid var(--line);border-radius:17px;padding:20px;display:flex;justify-content:space-between;align-items:center;gap:16px}.cta h2{font-size:20px;margin:0 0 5px}.cta p{font-size:13px;color:var(--muted);margin:0;line-height:1.5}footer{text-align:center;padding:22px 16px;background:var(--navy);color:#c4cee0;font-size:12px}.empty{display:none;padding:20px;text-align:center;color:var(--muted);background:white;border-radius:12px;margin-top:12px}@media(max-width:650px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.steps{grid-template-columns:1fr}.cta{align-items:flex-start;flex-direction:column}.logo{font-size:27px}.search{flex-direction:column}.search .btn{width:100%}}
+
+/* Fotos e formulários ConectaPro */
+.category-photo {
+  display:block;width:100%;height:105px;object-fit:cover;
+  border-radius:10px;margin-bottom:8px;
+}
+.photo-area {
+  margin:24px 0;padding:18px;border:1px solid #d8dee8;
+  border-radius:16px;background:rgba(128,128,128,.06);
+}
+.photo-area h2 {margin-top:0}
+.photo-area input,.photo-area textarea,.photo-area select {
+  display:block;width:100%;box-sizing:border-box;margin:8px 0 14px;
+  padding:12px;border:1px solid #cbd5e1;border-radius:10px;
+  font:inherit;background:white;color:#172033;
+}
+.photo-area textarea {min-height:100px;resize:vertical}
+.photo-area button {padding:12px 16px;border:0;border-radius:10px;cursor:pointer}
+.photo-previews {display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+.photo-previews img {width:110px;height:100px;object-fit:cover;border-radius:10px}
+.photo-help {font-size:.9rem;opacity:.8}
+
+
+#cadastro-profissional .campo{margin:12px 0}
+#cadastro-profissional label{display:block;font-weight:600;margin-bottom:5px}
+#cadastro-profissional input:not([type=file]),#cadastro-profissional select,#cadastro-profissional textarea{width:100%;box-sizing:border-box;padding:12px;border:1px solid #cbd5e1;border-radius:10px;font:inherit;background:white;color:#172033}
+#cadastro-profissional textarea{min-height:85px}
+#cadastro-profissional input[type=file]{display:block;width:100%;margin:10px 0}
+#cadastro-profissional .btn-cadastro{display:inline-block;padding:13px 18px;border:0;border-radius:10px;cursor:pointer;font-weight:700;text-decoration:none;margin:5px 5px 5px 0}
+#cadastro-profissional .fotos-perfil{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+#cadastro-profissional .fotos-perfil img,#perfil-salvo img{width:90px;height:80px;object-fit:cover;border-radius:8px}
+#perfil-salvo{margin-top:16px;padding:14px;border-radius:12px;background:rgba(128,128,128,.08)}
+#cadastro-profissional .aviso-cadastro{font-size:.9rem;opacity:.8}
+
+</style></head>
+<body>
+<header><div class="brand">NM TECH APRESENTA</div><div class="logo">Conecta<span>Pro</span></div><div class="tag">O profissional certo para o seu serviço.</div><div class="hero"><h1>Precisou de um serviço? Encontre quem pode ajudar.</h1><p>Descubra profissionais, explique o que precisa e solicite um orçamento. Cadastro gratuito para clientes.</p><div class="search"><input id="busca" type="search" placeholder="Qual serviço você procura?" aria-label="Buscar serviço"><button class="btn" id="buscar">Buscar serviço</button></div></div></header>
+<main class="main"><div class="sectionhead"><div><h2>Encontre por categoria</h2><div class="muted">Escolha o tipo de serviço que você precisa.</div></div></div>
+<div class="grid" id="categorias">
+<button class="category" data-name="eletrica eletricista eletricistas"><span class="emoji">⚡</span><strong>Elétrica</strong><small>Instalações e reparos</small></button>
+<button class="category" data-name="marido de aluguel montagem reparos handyman"><span class="emoji">🧰</span><strong>Marido de aluguel</strong><small>Montagens e pequenos reparos</small></button>
+<button class="category" data-name="pedreiro azulejista construcao reforma"><span class="emoji">🧱</span><strong>Pedreiro e azulejista</strong><small>Obras e revestimentos</small></button>
+<button class="category" data-name="marmore granito pedras bancada"><span class="emoji">◻️</span><strong>Mármore e granito</strong><small>Bancadas e instalação</small></button>
+<button class="category" data-name="seguranca eletronica cftv camera cameras vigilancia alarme alarmes sensores portaria interfone video porteiro controle acesso"><span class="emoji">🛡️</span><strong>Segurança Eletrônica</strong><small>Câmeras, alarmes e controle de acesso</small></button>
+<button class="category" data-name="pintor pintura paredes pintura residencial"><span class="emoji">🖌️</span><strong>Pintura</strong><small>Residencial e comercial</small></button>
+</div><div id="vazio" class="empty">Nenhuma categoria encontrada. Tente outro termo.</div>
+<div class="notice"><strong>Versão de demonstração:</strong> esta página apresenta a ideia do ConectaPro. Os cadastros, a localização ao vivo, os profissionais reais e o envio de pedidos ainda serão implementados.</div>
+<div class="sectionhead"><div><h2>Como funciona</h2><div class="muted">Um caminho simples entre cliente e profissional.</div></div></div>
+<div class="steps"><div class="step"><b>1. Escolha o serviço</b><p>Encontre a categoria e informe o que precisa, com fotos se necessário.</p></div><div class="step"><b>2. Encontre profissionais</b><p>Veja disponibilidade e reputação dos profissionais participantes.</p></div><div class="step"><b>3. Solicite um orçamento</b><p>Envie seu pedido e converse com profissionais para combinar os detalhes.</p></div></div>
+<div class="cta"><div><h2>Você trabalha com serviços?</h2><p>Prepare seu perfil para apresentar seu trabalho no ConectaPro.</p></div><button class="btn" id="profissional">Tenho interesse em ser profissional</button></div>
+
+<section class="photo-area" id="pedido-fotos">
+  <h2>📸 Mostre o serviço que você precisa</h2>
+  <p>Descreva o problema e, se puder, envie fotos para ajudar o profissional a preparar o orçamento.</p>
+  <form id="form-pedido">
+    <label for="categoria-pedido"><strong>Tipo de serviço</strong></label>
+    <select id="categoria-pedido" required>
+      <option value="">Escolha uma categoria</option>
+      <option>Elétrica</option><option>Marido de aluguel</option>
+      <option>Pedreiro e azulejista</option><option>Mármore e granito</option>
+      <option>Segurança Eletrônica</option><option>Pintura</option>
+    </select>
+    <label for="descricao-pedido"><strong>O que você precisa?</strong></label>
+    <textarea id="descricao-pedido" placeholder="Ex.: preciso instalar três tomadas na cozinha..." required></textarea>
+    <label for="fotos-pedido"><strong>Fotos do serviço (opcional)</strong></label>
+    <input id="fotos-pedido" type="file" accept="image/*" multiple>
+    <div id="preview-pedido" class="photo-previews"></div>
+    <p class="photo-help">Dica: evite mostrar documentos, rostos ou informações pessoais nas fotos.</p>
+    <button type="submit">Preparar pedido</button>
+  </form>
+</section>
+
+<section class="photo-area" id="portfolio-profissional">
+  <h2>🧰 Mostre seus trabalhos</h2>
+  <p>Profissionais poderão apresentar fotos de serviços realizados para demonstrar sua experiência.</p>
+  <label for="fotos-portfolio"><strong>Escolha fotos dos seus trabalhos</strong></label>
+  <input id="fotos-portfolio" type="file" accept="image/*" multiple>
+  <div id="preview-portfolio" class="photo-previews"></div>
+  <p class="photo-help">Nesta demonstração, as fotos aparecem apenas neste aparelho. O envio permanente será implementado depois.</p>
+</section>
+
+
+<section class="photo-area" id="cadastro-profissional">
+<h2>🧰 Cadastre-se como profissional</h2>
+<p>Mostre seus serviços e permita que clientes entrem em contato pelo WhatsApp.</p>
+<form id="form-profissional">
+<div class="campo"><label for="prof-nome">Nome profissional</label><input id="prof-nome" maxlength="80" required placeholder="Ex.: João Reparos"></div>
+<div class="campo"><label for="prof-whatsapp">WhatsApp com DDD</label><input id="prof-whatsapp" type="tel" maxlength="25" required placeholder="Ex.: 11999999999"></div>
+<div class="campo"><label for="prof-regiao">Cidade ou região atendida</label><input id="prof-regiao" maxlength="100" required placeholder="Ex.: São Paulo, zona leste"></div>
+<div class="campo"><label for="prof-servico">Serviço principal</label><select id="prof-servico" required><option value="">Selecione</option><option>Elétrica</option><option>Marido de aluguel</option><option>Pedreiro e azulejista</option><option>Mármore e granito</option><option>Segurança Eletrônica</option><option>Pintura</option></select></div>
+<div class="campo"><label for="prof-descricao">Descrição dos serviços</label><textarea id="prof-descricao" maxlength="700" placeholder="Conte sua experiência e os serviços que realiza."></textarea></div>
+<div class="campo"><label for="prof-fotos">Fotos dos trabalhos (máximo 4)</label><input id="prof-fotos" type="file" accept="image/*" multiple><div id="prof-preview" class="fotos-perfil"></div></div>
+<p class="aviso-cadastro">Demonstração: o perfil fica salvo somente neste navegador. Ainda não aparece para outros clientes. Informe apenas um WhatsApp que você autoriza divulgar.</p>
+<button class="btn-cadastro" type="submit">Salvar meu perfil</button>
+</form>
+<div id="perfil-salvo" hidden></div>
+</section>
+
+</main><footer><strong>ConectaPro</strong> é um projeto da NM TECH.<br>Conectando pessoas a profissionais.</footer>
+<script>
+const input=document.getElementById('busca'), cards=[...document.querySelectorAll('.category')], vazio=document.getElementById('vazio');function filtrar(q){let termo=q.trim().toLocaleLowerCase('pt-BR'),n=0;cards.forEach(c=>{let ok=!termo||(c.dataset.name+' '+c.innerText).toLocaleLowerCase('pt-BR').normalize('NFD').replace(/[\u0300-\u036f]/g,'').includes(termo.normalize('NFD').replace(/[\u0300-\u036f]/g,''));c.style.display=ok?'':'none';if(ok)n++});vazio.style.display=n?'none':'block'}document.getElementById('buscar').addEventListener('click',()=>filtrar(input.value));input.addEventListener('input',()=>filtrar(input.value));cards.forEach(c=>c.addEventListener('click',()=>{input.value=c.querySelector('strong').innerText;filtrar(input.value);window.scrollTo({top:0,behavior:'smooth'})}));
+
+// Imagens ilustrativas nas categorias
+const imagensCategorias = [
+  ['eletric', 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=600&q=80'],
+  ['marido', 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80'],
+  ['pedreiro', 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80'],
+  ['marmore', 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=600&q=80'],
+  ['seguranca', 'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=600&q=80'],
+  ['pintura', 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=600&q=80']
+];
+document.querySelectorAll('.category').forEach(card => {
+  const nome = (card.dataset.name || card.innerText).toLocaleLowerCase('pt-BR');
+  const item = imagensCategorias.find(([chave]) => nome.includes(chave));
+  if (item) {
+    const img = document.createElement('img');
+    img.className = 'category-photo';
+    img.src = item[1];
+    img.alt = 'Exemplo ilustrativo de ' + (card.querySelector('strong')?.innerText || 'serviço');
+    img.loading = 'lazy';
+    img.onerror = () => img.remove();
+    card.prepend(img);
+  }
+});
+function configurarPreview(inputId, previewId) {
+  const input = document.getElementById(inputId);
+  const preview = document.getElementById(previewId);
+  if (!input || !preview) return;
+  input.addEventListener('change', () => {
+    preview.replaceChildren();
+    Array.from(input.files || []).forEach(file => {
+      if (!file.type.startsWith('image/')) return;
+      const img = document.createElement('img');
+      img.alt = file.name;
+      img.src = URL.createObjectURL(file);
+      preview.appendChild(img);
+    });
+  });
+}
+configurarPreview('fotos-pedido', 'preview-pedido');
+configurarPreview('fotos-portfolio', 'preview-portfolio');
+document.getElementById('form-pedido')?.addEventListener('submit', event => {
+  event.preventDefault();
+  alert('Pedido demonstrativo preparado! O envio aos profissionais será implementado na próxima etapa. Nenhuma informação foi enviada.');
+});
+
+
+// Cadastro local e atalho de WhatsApp do ConectaPro
+(() => {
+ const form=document.getElementById('form-profissional');
+ if(!form)return;
+ const inputFotos=document.getElementById('prof-fotos');
+ const preview=document.getElementById('prof-preview');
+ const area=document.getElementById('perfil-salvo');
+ let fotos=[];
+ const campos=['prof-nome','prof-whatsapp','prof-regiao','prof-servico','prof-descricao'];
+
+ function otimizar(file){
+  return new Promise((resolve,reject)=>{
+   const url=URL.createObjectURL(file),img=new Image();
+   img.onload=()=>{
+    const escala=Math.min(1,800/Math.max(img.width,img.height));
+    const canvas=document.createElement('canvas');
+    canvas.width=Math.max(1,Math.round(img.width*escala));
+    canvas.height=Math.max(1,Math.round(img.height*escala));
+    canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+    URL.revokeObjectURL(url);
+    resolve(canvas.toDataURL('image/jpeg',0.55));
+   };
+   img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Não foi possível abrir uma das fotos.'));};
+   img.src=url;
+  });
+ }
+
+ function mostrarFotos(){
+  preview.replaceChildren();
+  fotos.forEach(src=>{
+   const img=document.createElement('img');
+   img.src=src;img.alt='Foto do trabalho';preview.appendChild(img);
+  });
+ }
+ inputFotos.addEventListener('change',async()=>{
+  fotos=[];
+  const files=Array.from(inputFotos.files||[]);
+  if(files.length>4){alert('Escolha no máximo 4 fotos.');inputFotos.value='';return;}
+  try{
+   for(const file of files){
+    if(file.type.startsWith('image/'))fotos.push(await otimizar(file));
+   }
+   mostrarFotos();
+  }catch(e){alert(e.message);}
+ });
+
+ function render(perfil){
+  area.hidden=false;area.replaceChildren();
+  const titulo=document.createElement('h3');titulo.textContent=perfil.nome;
+  const info=document.createElement('p');
+  info.textContent=perfil.servico+' • '+perfil.regiao;
+  const descricao=document.createElement('p');
+  descricao.textContent=perfil.descricao||'Entre em contato para saber mais.';
+  area.append(titulo,info,descricao);
+  (perfil.fotos||[]).forEach(src=>{
+   const img=document.createElement('img');img.src=src;img.alt='Trabalho realizado';
+   area.appendChild(img);
+  });
+  const numero=(perfil.whatsapp||'').replace(/\D/g,'');
+  if(numero.length>=10&&numero.length<=15){
+   const link=document.createElement('a');
+   link.className='btn-cadastro';
+   link.style.background='#168447';link.style.color='#fff';
+   link.href='https://wa.me/'+numero+'?text='+encodeURIComponent('Olá! Encontrei seu perfil no ConectaPro e gostaria de solicitar um orçamento para um serviço.');
+   link.target='_blank';link.rel='noopener noreferrer';
+   link.textContent='Chamar no WhatsApp';
+   area.appendChild(link);
+  }else{
+   const aviso=document.createElement('p');aviso.textContent='Confira o número de WhatsApp para habilitar o contato.';
+   area.appendChild(aviso);
+  }
+  const nota=document.createElement('p');nota.className='aviso-cadastro';
+  nota.textContent='Perfil demonstrativo neste aparelho; ainda não publicado para outros usuários.';
+  area.appendChild(nota);
+ }
+
+ try{
+  const salvo=localStorage.getItem('conectapro_perfil_profissional');
+  if(salvo){
+   const perfil=JSON.parse(salvo);
+   render(perfil);
+  }
+ }catch(e){}
+
+ form.addEventListener('submit', async event=>{
+  event.preventDefault();
+
+  const perfil={
+   nome:document.getElementById('prof-nome').value.trim(),
+   whatsapp:document.getElementById('prof-whatsapp').value.trim(),
+   regiao:document.getElementById('prof-regiao').value.trim(),
+   servico:document.getElementById('prof-servico').value,
+   descricao:document.getElementById('prof-descricao').value.trim(),
+   fotos:fotos
+  };
+
+  const numero=perfil.whatsapp.replace(/\D/g,'');
+  if(numero.length<10||numero.length>15){
+   alert('Confira o WhatsApp com DDD. Digite somente um número válido.');
+   return;
+  }
+
+  const botao=form.querySelector('button[type="submit"]');
+  if(botao) botao.disabled=true;
+
+  try{
+   const resposta=await fetch('http://127.0.0.1:5000/api/profissionais',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(perfil)
+   });
+
+   const resultado=await resposta.json();
+   if(!resposta.ok||!resultado.ok){
+    throw new Error(resultado.erro||'Não foi possível salvar o cadastro.');
+   }
+
+   perfil.id=resultado.id;
+
+   try{
+    localStorage.setItem('conectapro_perfil_profissional',JSON.stringify(perfil));
+   }catch(erro){
+    console.warn('Perfil salvo no servidor; armazenamento local indisponível.');
+   }
+
+   render(perfil);
+   form.reset();
+   fotos=[];
+   inputFotos.value='';
+   mostrarFotos();
+   alert('Cadastro salvo no banco de dados! Número do cadastro: '+resultado.id);
+  }catch(erro){
+   alert('Não consegui enviar para o banco. Confira se a API está ligada no Termux e tente novamente. Detalhe: '+erro.message);
+  }finally{
+   if(botao) botao.disabled=false;
+  }
+ });
+
+ document.getElementById('profissional')?.addEventListener('click',()=>{
+  document.getElementById('cadastro-profissional').scrollIntoView({behavior:'smooth'});
+ });
+})();
+
+</script></body></html>
