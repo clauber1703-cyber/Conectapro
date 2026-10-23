@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin | ConectaPro</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font:16px Arial,sans-serif;background:#101827;color:#f3f6fb}
+main{max-width:900px;margin:auto;padding:22px}.card{background:#1c293b;border:1px solid #35445a;border-radius:14px;padding:18px;margin:14px 0}
+h1{margin-bottom:6px}p{line-height:1.5;color:#cbd5e1}input,button{font:inherit;padding:12px;border-radius:8px;border:1px solid #52627a;width:100%;margin:6px 0}
+input{background:#0e1726;color:white}button{background:#27b477;color:#061b12;border:0;font-weight:bold;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.numero{font-size:28px;font-weight:bold;margin-top:10px;color:#70e5b2}
+small{color:#cbd5e1}.erro{color:#ffb4b4}.linha{padding:9px 0;border-bottom:1px solid #35445a}
+</style>
+</head>
+<body><main>
+<h1>ConectaPro · Administração</h1>
+<p>Painel privado da NM TECH. Informe o token administrativo configurado no Render.</p>
+<section class="card">
+<label for="token">Token administrativo</label>
+<input id="token" type="password" autocomplete="current-password" placeholder="ADMIN_TOKEN">
+<button id="entrar">Acessar painel</button>
+<button id="sair" style="background:#52627a;color:white">Sair e limpar token</button>
+<p id="status" role="status"></p>
+</section>
+<div id="painel" hidden>
+<div class="grid">
+<section class="card"><small>Profissionais cadastrados</small><div class="numero" id="profissionais">—</div></section>
+<section class="card"><small>Pagamentos registrados nas últimas 24h</small><div class="numero" id="qtdpag">—</div></section>
+<section class="card"><small>Faturamento registrado nas últimas 24h</small><div class="numero" id="faturamento">—</div></section>
+</div>
+<section class="card"><h2>Profissionais por categoria</h2><div id="categorias">—</div></section>
+<section class="card"><h2>Clientes e pedidos</h2><p id="aviso"></p></section>
+<section class="card"><h2>Registrar pagamento confirmado</h2>
+<p>Use somente para um pagamento que você verificou de verdade. Este formulário registra manualmente; não consulta banco ou gateway de pagamento.</p>
+<label for="descricao">Descrição</label><input id="descricao" maxlength="200" placeholder="Ex.: mensalidade do profissional">
+<label for="valor">Valor recebido (R$)</label><input id="valor" inputmode="decimal" placeholder="Ex.: 150,00">
+<button id="registrar">Registrar pagamento verificado</button>
+<p id="resultado"></p>
+</section>
+</div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+let token='';
+function reais(centavos){
+ return (centavos/100).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+}
+async function requisicao(url,opcoes={}){
+ const r=await fetch(url,{...opcoes,headers:{
+  'Authorization':'Bearer '+token,
+  ...(opcoes.headers||{})
+ }});
+ const d=await r.json();
+ if(!r.ok||!d.ok)throw new Error(d.erro||'Falha na solicitação');
+ return d;
+}
+async function carregar(){
+ $('status').textContent='Verificando acesso...';
+ try{
+  const d=await requisicao('/api/admin/dashboard');
+  $('profissionais').textContent=d.profissionais;
+  $('qtdpag').textContent=d.pagamentos_confirmados_24h;
+  $('faturamento').textContent=reais(d.faturamento_centavos_24h);
+  $('categorias').replaceChildren();
+  if(!d.por_categoria.length){
+   $('categorias').textContent='Nenhum profissional cadastrado.';
+  }else{
+   d.por_categoria.forEach(c=>{
+    const div=document.createElement('div');div.className='linha';
+    div.textContent=c.categoria+': '+c.total;
+    $('categorias').appendChild(div);
+   });
+  }
+  $('aviso').textContent=d.clientes_pedidos_aviso;
+  $('painel').hidden=false;
+  $('status').textContent='Acesso autorizado.';
+ }catch(e){
+  $('painel').hidden=true;$('status').textContent=e.message;
+  $('status').className='erro';
+ }
+}
+$('entrar').onclick=()=>{
+ token=$('token').value.trim();
+ if(token)carregar();
+ else $('status').textContent='Informe o token.';
+};
+$('sair').onclick=()=>{
+ token='';$('token').value='';$('painel').hidden=true;
+ $('status').textContent='Token limpo desta sessão.';
+};
+$('registrar').onclick=async()=>{
+ $('resultado').textContent='';
+ const descricao=$('descricao').value.trim();
+ const valor=$('valor').value.trim().replace(/\./g,'').replace(',','.');
+ if(!descricao||!valor||!Number.isFinite(Number(valor))||Number(valor)<=0){
+  $('resultado').textContent='Confira a descrição e o valor.';
+  return;
+ }
+ try{
+  const d=await requisicao('/api/admin/pagamentos',{
+   method:'POST',
+   headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({descricao,valor})
+  });
+  $('resultado').textContent=d.mensagem;
+  $('descricao').value='';$('valor').value='';
+  await carregar();
+ }catch(e){$('resultado').textContent=e.message;}
+};
+</script>
+</body></html>
