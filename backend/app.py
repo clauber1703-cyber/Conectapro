@@ -41,7 +41,7 @@ class API(BaseHTTPRequestHandler):
         self.responder(200, {"ok": True})
 
     def do_GET(self):
-        if self.path in ("/", "/index.html"):
+        if self.path.split("?", 1)[0] in ("/", "/index.html"):
             if not FRONTEND.exists():
                 return self.responder(500, {"ok": False, "erro": "Página não encontrada."})
             corpo = FRONTEND.read_bytes()
@@ -52,10 +52,10 @@ class API(BaseHTTPRequestHandler):
             self.wfile.write(corpo)
             return
 
-        if self.path == "/api/health":
+        if self.path.split("?", 1)[0] == "/api/health":
             return self.responder(200, {"ok": True, "servico": "ConectaPro API"})
 
-        if self.path == "/api/profissionais":
+        if self.path.split("?", 1)[0] == "/api/profissionais":
             with conectar() as db:
                 linhas = db.execute(
                     "SELECT * FROM profissionais ORDER BY id DESC"
@@ -72,7 +72,7 @@ class API(BaseHTTPRequestHandler):
         self.responder(404, {"ok": False, "erro": "Rota não encontrada"})
 
     def do_POST(self):
-        if self.path != "/api/profissionais":
+        if self.path.split("?", 1)[0] != "/api/profissionais":
             return self.responder(404, {"ok": False, "erro": "Rota não encontrada"})
         try:
             tamanho = int(self.headers.get("Content-Length", "0"))
