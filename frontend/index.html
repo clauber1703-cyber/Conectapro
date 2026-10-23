@@ -159,6 +159,57 @@ document.getElementById('form-pedido')?.addEventListener('submit', event => {
  const inputFotos=document.getElementById('prof-fotos');
  const preview=document.getElementById('prof-preview');
  const area=document.getElementById('perfil-salvo');
+
+ const listaPublica=document.createElement('section');
+ listaPublica.id='conectapro-lista-publica';
+ listaPublica.style.cssText='margin:24px 0;padding:16px;border-radius:14px;background:rgba(128,128,128,.08)';
+ area.insertAdjacentElement('afterend',listaPublica);
+
+ async function carregarProfissionais(){
+  listaPublica.replaceChildren();
+  const titulo=document.createElement('h2');
+  titulo.textContent='Profissionais cadastrados';
+  listaPublica.appendChild(titulo);
+  const status=document.createElement('p');
+  status.textContent='Carregando profissionais...';
+  listaPublica.appendChild(status);
+  try{
+   const resposta=await fetch('/api/profissionais');
+   const dados=await resposta.json();
+   if(!resposta.ok||!dados.ok) throw new Error();
+   listaPublica.replaceChildren(titulo);
+   const profissionais=dados.profissionais||[];
+   const total=document.createElement('p');
+   total.textContent=profissionais.length+' profissional(is) encontrado(s).';
+   listaPublica.appendChild(total);
+   profissionais.forEach(perfil=>{
+    const cartao=document.createElement('article');
+    cartao.style.cssText='padding:14px;margin:12px 0;border:1px solid #8885;border-radius:12px';
+    const nome=document.createElement('h3');
+    nome.textContent=perfil.nome||'Profissional';
+    const info=document.createElement('p');
+    info.textContent=(perfil.servico||'Serviço não informado')+' • '+(perfil.regiao||'Região não informada');
+    const descricao=document.createElement('p');
+    descricao.textContent=perfil.descricao||'Entre em contato para saber mais.';
+    cartao.append(nome,info,descricao);
+    const numero=String(perfil.whatsapp||'').replace(/\D/g,'');
+    if(numero.length>=10&&numero.length<=15){
+     const link=document.createElement('a');
+     link.className='btn-cadastro';
+     link.style.cssText='display:inline-block;background:#168447;color:#fff;padding:10px 14px;border-radius:8px;text-decoration:none;margin-top:8px';
+     link.href='https://wa.me/'+numero+'?text='+encodeURIComponent('Olá! Encontrei seu perfil no ConectaPro e gostaria de solicitar um orçamento para '+(perfil.servico||'um serviço')+'.');
+     link.target='_blank';
+     link.rel='noopener noreferrer';
+     link.textContent='Chamar no WhatsApp';
+     cartao.appendChild(link);
+    }
+    listaPublica.appendChild(cartao);
+   });
+  }catch(e){
+   status.textContent='Não foi possível carregar os profissionais. Atualize a página e tente novamente.';
+  }
+ }
+
  let fotos=[];
  const campos=['prof-nome','prof-whatsapp','prof-regiao','prof-servico','prof-descricao'];
 
@@ -197,6 +248,8 @@ document.getElementById('form-pedido')?.addEventListener('submit', event => {
    mostrarFotos();
   }catch(e){alert(e.message);}
  });
+
+ carregarProfissionais();
 
  function render(perfil){
   area.hidden=false;area.replaceChildren();
