@@ -258,7 +258,7 @@ document.getElementById('form-pedido')?.addEventListener('submit', event => {
   if(botao) botao.disabled=true;
 
   try{
-   const resposta=await fetch('http://127.0.0.1:5000/api/profissionais',{
+   const resposta=await fetch('/api/profissionais',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify(perfil)
