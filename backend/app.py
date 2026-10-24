@@ -44,6 +44,24 @@ with conectar() as db:
     """)
 
 
+# Migração segura: adiciona situação de pagamento sem apagar cadastros.
+with conectar() as db:
+    colunas = {
+        linha["name"]
+        for linha in db.execute("PRAGMA table_info(profissionais)")
+    }
+    if "status_pagamento" not in colunas:
+        db.execute("""
+            ALTER TABLE profissionais
+            ADD COLUMN status_pagamento TEXT NOT NULL DEFAULT 'pendente'
+        """)
+    if "pagamento_confirmado_em" not in colunas:
+        db.execute("""
+            ALTER TABLE profissionais
+            ADD COLUMN pagamento_confirmado_em TEXT
+        """)
+
+
 class API(BaseHTTPRequestHandler):
     def responder(self, status, dados):
         corpo = json.dumps(dados, ensure_ascii=False).encode("utf-8")
@@ -141,9 +159,15 @@ class API(BaseHTTPRequestHandler):
                     FROM pagamentos
                     WHERE status = 'confirmado' AND confirmado_em >= ?
                 """, (limite,)).fetchone()
+                profissionais_lista = db.execute("""
+                    SELECT id, nome, whatsapp, servico, regiao,
+                           status_pagamento, pagamento_confirmado_em
+                    FROM profissionais ORDER BY id DESC
+                """).fetchall()
             return self.responder(200, {
                 "ok": True,
                 "profissionais": total,
+                "lista_profissionais": [dict(r) for r in profissionais_lista],
                 "por_categoria": [
                     {"categoria": r["servico"], "total": r["total"]}
                     for r in categorias
@@ -161,12 +185,12 @@ class API(BaseHTTPRequestHandler):
     def do_POST(self):
         caminho = self.path.split("?", 1)[0]
 
-        if caminho not in ("/api/profissionais", "/api/admin/pagamentos"):
+        if caminho not in ("/api/profissionais", "/api/admin/pagamentos", "/api/admin/profissionais/status"):
             return self.responder(404, {
                 "ok": False, "erro": "Rota não encontrada"
             })
 
-        if caminho == "/api/admin/pagamentos":
+        if caminho in ("/api/admin/pagamentos", "/api/admin/profissionais/status"):
             if not self.admin_autorizado():
                 return
 
@@ -179,6 +203,24 @@ class API(BaseHTTPRequestHandler):
             dados = json.loads(self.rfile.read(tamanho).decode("utf-8"))
             if not isinstance(dados, dict):
                 raise ValueError("Objeto inválido")
+
+            if caminho == "/api/admin/profissionais/status":
+                try:
+                    pid = int(dados.get("id", 0))
+                except (ValueError, TypeError):
+                    return self.responder(400, {"ok": False, "erro": "ID inválido."})
+                if dados.get("status") != "pago":
+                    return self.responder(400, {"ok": False, "erro": "Status inválido."})
+                agora = datetime.now(timezone.utc).isoformat()
+                with conectar() as db:
+                    prof = db.execute("SELECT nome, status_pagamento FROM profissionais WHERE id = ?", (pid,)).fetchone()
+                    if not prof:
+                        return self.responder(404, {"ok": False, "erro": "Profissional não encontrado."})
+                    if prof["status_pagamento"] == "pago":
+                        return self.responder(409, {"ok": False, "erro": "Pagamento já confirmado."})
+                    db.execute("UPDATE profissionais SET status_pagamento='pago', pagamento_confirmado_em=? WHERE id=?", (agora, pid))
+                    db.execute("INSERT INTO pagamentos (descricao, valor_centavos, status, confirmado_em) VALUES (?, 4990, 'confirmado', ?)", ("Mensalidade ConectaPro - " + prof["nome"], agora))
+                return self.responder(200, {"ok": True, "mensagem": "Pix confirmado manualmente."})
 
             if caminho == "/api/admin/pagamentos":
                 descricao = str(dados.get("descricao", "")).strip()

@@ -30,6 +30,7 @@ small{color:#cbd5e1}.erro{color:#ffb4b4}.linha{padding:9px 0;border-bottom:1px s
 <section class="card"><small>Pagamentos registrados nas últimas 24h</small><div class="numero" id="qtdpag">—</div></section>
 <section class="card"><small>Faturamento registrado nas últimas 24h</small><div class="numero" id="faturamento">—</div></section>
 </div>
+<section class="card"><h2>Profissionais e mensalidades</h2><div id="lista-profissionais">Carregando...</div></section>
 <section class="card"><h2>Profissionais por categoria</h2><div id="categorias">—</div></section>
 <section class="card"><h2>Clientes e pedidos</h2><p id="aviso"></p></section>
 <section class="card"><h2>Registrar pagamento confirmado</h2>
@@ -73,6 +74,32 @@ async function carregar(){
     $('categorias').appendChild(div);
    });
   }
+  const lista=$('lista-profissionais');
+  lista.replaceChildren();
+  (d.lista_profissionais||[]).forEach(p=>{
+   const linha=document.createElement('div');
+   linha.className='linha';
+   const info=document.createElement('p');
+   info.textContent=p.nome+' — '+p.servico+' — '+p.regiao+' — WhatsApp: '+p.whatsapp+' — Mensalidade: '+(p.status_pagamento==='pago'?'PAGO':'PENDENTE');
+   linha.appendChild(info);
+   if(p.status_pagamento!=='pago'){
+    const botao=document.createElement('button');
+    botao.textContent='Confirmar Pix recebido (R$ 49,90)';
+    botao.onclick=async()=>{
+     if(!confirm('Confirma que recebeu o Pix de R$ 49,90 de '+p.nome+'?'))return;
+     try{
+      const r=await requisicao('/api/admin/profissionais/status',{
+       method:'POST',headers:{'Content-Type':'application/json'},
+       body:JSON.stringify({id:p.id,status:'pago'})
+      });
+      alert(r.mensagem);await carregar();
+     }catch(e){alert(e.message);}
+    };
+    linha.appendChild(botao);
+   }
+   lista.appendChild(linha);
+  });
+  if(!(d.lista_profissionais||[]).length)lista.textContent='Nenhum profissional cadastrado.';
   $('aviso').textContent=d.clientes_pedidos_aviso;
   $('painel').hidden=false;
   $('status').textContent='Acesso autorizado.';
