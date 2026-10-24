@@ -335,7 +335,7 @@ document.getElementById('form-pedido')?.addEventListener('submit', event => {
    fotos=[];
    inputFotos.value='';
    mostrarFotos();
-   alert('Cadastro salvo no banco de dados! Número do cadastro: '+resultado.id);
+   alert('Cadastro salvo! Número: '+resultado.id+'\n\nMensalidade ConectaPro: R$ 49,90\n\nPague via Pix usando a chave aleatória:\n3151d442-cb09-4710-bbf9-afab367bc6c9\n\nApós pagar, aguarde a confirmação do administrador.');
   }catch(erro){
    alert('Não consegui enviar para o banco. Confira se a API está ligada no Termux e tente novamente. Detalhe: '+erro.message);
   }finally{
