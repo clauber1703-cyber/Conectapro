@@ -452,6 +452,12 @@ class API(BaseHTTPRequestHandler):
                             "erro": "E-mail/WhatsApp ou senha incorretos."
                         })
 
+                    if str(conta["status_pagamento"] or "").lower() != "pago":
+                        return self.responder(403, {
+                            "ok": False,
+                            "erro": "Pagamento pendente. Aguarde a confirmação do administrador."
+                        })
+
                     token = secrets.token_urlsafe(32)
                     agora = datetime.now(timezone.utc)
                     db.execute("""
