@@ -47,9 +47,14 @@
 <button class="category" data-name="eletrica eletricista eletricistas"><span class="emoji">⚡</span><strong>Elétrica</strong><small>Instalações e reparos</small></button>
 <button class="category" data-name="marido de aluguel montagem reparos handyman"><span class="emoji">🧰</span><strong>Marido de aluguel</strong><small>Montagens e pequenos reparos</small></button>
 <button class="category" data-name="pedreiro azulejista construcao reforma"><span class="emoji">🧱</span><strong>Pedreiro e azulejista</strong><small>Obras e revestimentos</small></button>
-<button class="category" data-name="marmore granito pedras bancada"><span class="emoji">◻️</span><strong>Mármore e granito</strong><small>Bancadas e instalação</small></button>
+<button class="category" data-name="marmore granito pedras bancada instalacao reparos"><span class="emoji">◻️</span><strong>Mármore e granito</strong><small>Instalação, acabamentos e reparos</small></button>
 <button class="category" data-name="seguranca eletronica cftv camera cameras vigilancia alarme alarmes sensores portaria interfone video porteiro controle acesso"><span class="emoji">🛡️</span><strong>Segurança Eletrônica</strong><small>Câmeras, alarmes e controle de acesso</small></button>
-<button class="category" data-name="pintor pintura paredes pintura residencial"><span class="emoji">🖌️</span><strong>Pintura</strong><small>Residencial e comercial</small></button>
+<button class="category" data-name="pintor pintura paredes residencial"><span class="emoji">🖌️</span><strong>Pintura</strong><small>Residencial e comercial</small></button>
+<button class="category" data-name="ar condicionado instalacao manutencao limpeza conserto"><span class="emoji">❄️</span><strong>Ar-condicionado</strong><small>Instalação, manutenção e reparos</small></button>
+<button class="category" data-name="manicure pedicure unhas"><span class="emoji">💅</span><strong>Manicure e pedicure</strong><small>Cuidados com as unhas</small></button>
+<button class="category" data-name="cabeleireiro cabeleireira cabelo corte escova"><span class="emoji">💇</span><strong>Cabeleireiro</strong><small>Cortes, escovas e cuidados</small></button>
+<button class="category" data-name="sobrancelha designer design sobrancelhas"><span class="emoji">✨</span><strong>Designer de sobrancelhas</strong><small>Design e cuidados</small></button>
+<button class="category" data-name="costureira costura ajustes roupas consertos"><span class="emoji">🧵</span><strong>Costureira</strong><small>Ajustes e consertos de roupas</small></button>
 </div><div id="vazio" class="empty">Nenhuma categoria encontrada. Tente outro termo.</div>
 <div class="notice"><strong>Versão de demonstração:</strong> esta página apresenta a ideia do ConectaPro. Os cadastros, a localização ao vivo, os profissionais reais e o envio de pedidos ainda serão implementados.</div>
 <div class="sectionhead"><div><h2>Como funciona</h2><div class="muted">Um caminho simples entre cliente e profissional.</div></div></div>
@@ -63,9 +68,17 @@
     <label for="categoria-pedido"><strong>Tipo de serviço</strong></label>
     <select id="categoria-pedido" required>
       <option value="">Escolha uma categoria</option>
-      <option>Elétrica</option><option>Marido de aluguel</option>
-      <option>Pedreiro e azulejista</option><option>Mármore e granito</option>
-      <option>Segurança Eletrônica</option><option>Pintura</option>
+      <option>Elétrica</option>
+      <option>Marido de aluguel</option>
+      <option>Pedreiro e azulejista</option>
+      <option value="Mármore e granito">Mármore e granito — instalação e reparos</option>
+      <option>Segurança Eletrônica</option>
+      <option>Pintura</option>
+      <option>Ar-condicionado</option>
+      <option>Manicure e pedicure</option>
+      <option>Cabeleireiro</option>
+      <option>Designer de sobrancelhas</option>
+      <option>Costureira</option>
     </select>
     <label for="descricao-pedido"><strong>O que você precisa?</strong></label>
     <textarea id="descricao-pedido" placeholder="Ex.: preciso instalar três tomadas na cozinha..." required></textarea>
@@ -94,7 +107,20 @@
 <div class="campo"><label for="prof-nome">Nome profissional</label><input id="prof-nome" maxlength="80" required placeholder="Ex.: João Reparos"></div>
 <div class="campo"><label for="prof-whatsapp">WhatsApp com DDD</label><input id="prof-whatsapp" type="tel" maxlength="25" required placeholder="Ex.: 11999999999"></div>
 <div class="campo"><label for="prof-regiao">Cidade ou região atendida</label><input id="prof-regiao" maxlength="100" required placeholder="Ex.: São Paulo, zona leste"></div>
-<div class="campo"><label for="prof-servico">Serviço principal</label><select id="prof-servico" required><option value="">Selecione</option><option>Elétrica</option><option>Marido de aluguel</option><option>Pedreiro e azulejista</option><option>Mármore e granito</option><option>Segurança Eletrônica</option><option>Pintura</option></select></div>
+<div class="campo"><label for="prof-servico">Serviço principal</label><select id="prof-servico" required>
+<option value="">Selecione</option>
+<option>Elétrica</option>
+<option>Marido de aluguel</option>
+<option>Pedreiro e azulejista</option>
+<option value="Mármore e granito">Mármore e granito — instalação e reparos</option>
+<option>Segurança Eletrônica</option>
+<option>Pintura</option>
+<option>Ar-condicionado</option>
+<option>Manicure e pedicure</option>
+<option>Cabeleireiro</option>
+<option>Designer de sobrancelhas</option>
+<option>Costureira</option>
+</select></div>
 <div class="campo"><label for="prof-descricao">Descrição dos serviços</label><textarea id="prof-descricao" maxlength="700" placeholder="Conte sua experiência e os serviços que realiza."></textarea></div>
 <div class="campo"><label for="prof-fotos">Fotos dos trabalhos (máximo 4)</label><input id="prof-fotos" type="file" accept="image/*" multiple><div id="prof-preview" class="fotos-perfil"></div></div>
 <p class="aviso-cadastro">Demonstração: o perfil fica salvo somente neste navegador. Ainda não aparece para outros clientes. Informe apenas um WhatsApp que você autoriza divulgar.</p>
@@ -114,7 +140,12 @@ const imagensCategorias = [
   ['pedreiro', 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80'],
   ['marmore', 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=600&q=80'],
   ['seguranca', 'https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=600&q=80'],
-  ['pintura', 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=600&q=80']
+  ['pintura', 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?auto=format&fit=crop&w=600&q=80'],
+  ['ar', 'https://www.nesebarclima.com/assets/images/hvac-installation.jpg'],
+  ['manicure', 'https://images.pexels.com/photos/36876030/pexels-photo-36876030.jpeg?auto=compress&cs=tinysrgb&w=600'],
+  ['cabeleireiro', 'https://cdn1.treatwell.net/images/view/v2.i832051.w1080.h720.x2DE03068/'],
+  ['sobrancelha', 'https://images.fresha.com/locations/location-profile-images/425683/4864720/27aaa26a-bb2e-469d-9e8e-30cbb0d62b8a-SophiaGeorgiouSalon-GB-England-Stockport-Reddish-Fresha.jpg?class=venue-gallery-mobile&f_width=1200'],
+  ['costureira', 'https://shop.wwchan.com/cdn/shop/files/DSC_0168_1000x.jpg?v=1614337587']
 ];
 document.querySelectorAll('.category').forEach(card => {
   const nome = (card.dataset.name || card.innerText).toLocaleLowerCase('pt-BR');
