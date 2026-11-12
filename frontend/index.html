@@ -105,7 +105,10 @@
 <p>Mostre seus serviços e permita que clientes entrem em contato pelo WhatsApp.</p>
 <form id="form-profissional">
 <div class="campo"><label for="prof-nome">Nome profissional</label><input id="prof-nome" maxlength="80" required placeholder="Ex.: João Reparos"></div>
-<div class="campo"><label for="prof-whatsapp">WhatsApp com DDD</label><input id="prof-whatsapp" type="tel" maxlength="25" required placeholder="Ex.: 11999999999"></div>
+<div class="campo"><label for="prof-whatsapp">WhatsApp com DDD e código do Brasil</label><input id="prof-whatsapp" type="tel" maxlength="25" required placeholder="Ex.: +55 (11) 99999-9999"></div>
+<div class="campo"><label for="prof-email">E-mail para acessar</label><input id="prof-email" type="email" maxlength="254" required placeholder="seuemail@exemplo.com"></div>
+<div class="campo"><label for="prof-senha">Crie uma senha (mínimo 8 caracteres)</label><input id="prof-senha" type="password" minlength="8" maxlength="128" required></div>
+<div class="campo"><label for="prof-confirma-senha">Confirme a senha</label><input id="prof-confirma-senha" type="password" minlength="8" maxlength="128" required></div>
 <div class="campo"><label for="prof-regiao">Cidade ou região atendida</label><input id="prof-regiao" maxlength="100" required placeholder="Ex.: São Paulo, zona leste"></div>
 <div class="campo"><label for="prof-servico">Serviço principal</label><select id="prof-servico" required>
 <option value="">Selecione</option>
@@ -126,6 +129,24 @@
 <p class="aviso-cadastro">Demonstração: o perfil fica salvo somente neste navegador. Ainda não aparece para outros clientes. Informe apenas um WhatsApp que você autoriza divulgar.</p>
 <button class="btn-cadastro" type="submit">Salvar meu perfil</button>
 </form>
+
+<div class="campo" style="margin-top:25px;padding-top:20px;border-top:1px solid #ddd">
+<h2>🔐 Já sou profissional cadastrado</h2>
+<form id="form-login-prestador">
+<div class="campo">
+<label for="login-identificador">E-mail ou WhatsApp</label>
+<input id="login-identificador" required placeholder="Digite seu e-mail ou WhatsApp">
+</div>
+<div class="campo">
+<label for="login-senha">Senha</label>
+<input id="login-senha" type="password" required>
+</div>
+<button class="btn-cadastro" type="submit">Entrar</button>
+<p id="login-mensagem" role="status"></p>
+</form>
+<div id="area-prestador" hidden></div>
+</div>
+
 <div id="perfil-salvo" hidden></div>
 </section>
 
@@ -326,11 +347,19 @@ document.getElementById('form-pedido')?.addEventListener('submit', event => {
   const perfil={
    nome:document.getElementById('prof-nome').value.trim(),
    whatsapp:document.getElementById('prof-whatsapp').value.trim(),
+   email:document.getElementById('prof-email').value.trim(),
+   senha:document.getElementById('prof-senha').value,
    regiao:document.getElementById('prof-regiao').value.trim(),
    servico:document.getElementById('prof-servico').value,
    descricao:document.getElementById('prof-descricao').value.trim(),
    fotos:fotos
   };
+
+  const confirmacao=document.getElementById('prof-confirma-senha').value;
+  if(perfil.senha!==confirmacao){
+   alert('As senhas não são iguais.');
+   return;
+  }
 
   const numero=perfil.whatsapp.replace(/\D/g,'');
   if(numero.length<10||numero.length>15){
@@ -433,6 +462,53 @@ document.getElementById('form-pedido')?.addEventListener('submit', event => {
    if(botao) botao.disabled=false;
   }
  });
+
+
+ const formLogin = document.getElementById('form-login-prestador');
+ if (formLogin) {
+   formLogin.addEventListener('submit', async event => {
+     event.preventDefault();
+
+     const identificador = document.getElementById('login-identificador').value.trim();
+     const senha = document.getElementById('login-senha').value;
+     const mensagem = document.getElementById('login-mensagem');
+     const botaoLogin = formLogin.querySelector('button[type="submit"]');
+
+     if (botaoLogin) botaoLogin.disabled = true;
+     mensagem.textContent = 'Verificando acesso...';
+
+     try {
+       const payload = identificador.includes('@')
+         ? {email: identificador, senha}
+         : {whatsapp: identificador, senha};
+
+       const resposta = await fetch('/api/prestador/login', {
+         method: 'POST',
+         headers: {'Content-Type': 'application/json'},
+         body: JSON.stringify(payload)
+       });
+
+       const dados = await resposta.json();
+       if (!resposta.ok || !dados.ok) {
+         throw new Error(dados.erro || 'E-mail/WhatsApp ou senha incorretos.');
+       }
+
+       localStorage.setItem('conectapro_token_prestador', dados.token);
+       localStorage.setItem('conectapro_prestador', JSON.stringify(dados.prestador));
+
+       mensagem.textContent = 'Acesso liberado! Bem-vindo, ' + dados.prestador.nome + '.';
+       const areaPrestador = document.getElementById('area-prestador');
+       if (areaPrestador) {
+         areaPrestador.hidden = false;
+         areaPrestador.textContent = 'Olá, ' + dados.prestador.nome + '! Seu acesso está ativo.';
+       }
+     } catch (erro) {
+       mensagem.textContent = erro.message || 'Erro ao entrar.';
+     } finally {
+       if (botaoLogin) botaoLogin.disabled = false;
+     }
+   });
+ }
 
  document.getElementById('profissional')?.addEventListener('click',()=>{
   document.getElementById('cadastro-profissional').scrollIntoView({behavior:'smooth'});
